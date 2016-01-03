@@ -5,6 +5,7 @@
 #include <iostream>
 #include <error.h>
 #include <stdexcept>
+#include <cmath>
 #include "Expression.h"
 
 Expression::Expression(){
@@ -51,10 +52,14 @@ double Expression::term(){
 				t = ts.get();
 				break;
 			}
-//			case '%':
-//				left %= primary();
-//				t = get_token();
-//				break;
+			case '%':
+			{
+				double d = primary();
+				if (d == 0) throw std::invalid_argument("divide by zero");
+				left = fmod(left,d);
+				t = ts.get();
+				break;
+			}
 			default:
 				ts.putback(t);
 				return left;
