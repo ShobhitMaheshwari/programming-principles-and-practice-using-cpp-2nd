@@ -83,13 +83,14 @@ int Expression::evaluate(){
 	double val = 0;
 	try {
 		while (std::cin) {
+			std::cout << "> ";
 			Token t = ts.get();
-			if (t.kind == 'q') break; // ‘q’ for “quit”
-			if (t.kind == ';') // ‘;’ for “print now”
-				std::cout << "=" << val << '\n';
-			else
-				ts.putback(t);
-			val = this->expression();
+			while (t.kind == ';') t=ts.get(); // eat ‘;’
+			if (t.kind == 'q') {
+				return 0;
+			}
+			ts.putback(t);
+			std::cout << "=" << this->expression() << '\n';
 		}
 		return 0;
 	} catch (std::exception& e) {
