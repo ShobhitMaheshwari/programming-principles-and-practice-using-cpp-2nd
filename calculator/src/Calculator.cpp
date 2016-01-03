@@ -95,13 +95,25 @@ double Calculator::primary(){
 void Calculator::evaluate(){
 
 	while (std::cin) {
-		std::cout << prompt;
-		Token t = ts.get();
-		while (t.kind == Token_stream::print) t=ts.get(); // eat ‘;’
-		if (t.kind == Token_stream::quit) {
-			return;
+
+		try {
+			std::cout << prompt;
+			Token t = ts.get();
+			while (t.kind == Token_stream::print) t=ts.get(); // first discard all “prints”
+			if (t.kind == Token_stream::quit) {
+				return;
+			}
+			ts.putback(t);
+			std::cout << result << this->expression() << '\n';
 		}
-		ts.putback(t);
-		std::cout << result << this->expression() << '\n';
+		catch (std::exception& e) {
+			std::cerr << e.what() << '\n'; // write error message
+			clean_up_mess();
+		}
 	}
+}
+
+void Calculator::clean_up_mess() // naive
+{
+	ts.ignore(Token_stream::print);
 }

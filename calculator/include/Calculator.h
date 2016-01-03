@@ -57,16 +57,16 @@ private:
 	static const std::string result; // used to indicate that what follows is a result
 	Token_stream ts;        // provides get() and putback()
 
-public:
-
-	Calculator();
-
 	Token get_token(); // read characters and compose tokens
 	double expression(); // deal with + and –
 	double term(); // deal with *, /, and %
 	double primary(); // deal with numbers and parentheses
-	void evaluate();
+	void clean_up_mess();
 
+public:
+
+	Calculator();
+	void evaluate();
 };
 
 

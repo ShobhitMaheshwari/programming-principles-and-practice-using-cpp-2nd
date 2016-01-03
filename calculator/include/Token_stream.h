@@ -16,6 +16,8 @@ public:
     static const char quit = 'q'; // t.kind==quit means that t is a quit Token
     static const char print = ';'; // t.kind==print means that t is a print Token
 
+    void ignore(char c); // discard characters up to and including a c
+
 private:
     bool full;        // is there a Token in the buffer?
     Token buffer;     // here is where we keep a Token put back using putback()

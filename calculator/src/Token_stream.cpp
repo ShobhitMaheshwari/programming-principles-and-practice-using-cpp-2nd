@@ -60,3 +60,17 @@ Token Token_stream::get()
 			throw std::invalid_argument("Bad token");
 	}
 }
+
+void Token_stream::ignore(char c) // c represents the kind of Token
+{
+	// first look in buffer:
+	if (full && c==buffer.kind) {
+		full = false;
+		return;
+	}
+	full = false;
+	// now search input:
+	char ch = 0;
+	while (cin>>ch)
+		if (ch==c) return;
+}
