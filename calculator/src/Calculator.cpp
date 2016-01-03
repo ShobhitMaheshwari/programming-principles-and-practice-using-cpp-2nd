@@ -6,17 +6,22 @@
 #include <error.h>
 #include <stdexcept>
 #include <cmath>
-#include "Expression.h"
+#include "Calculator.h"
 
-Expression::Expression(){
+const char Calculator::number = '8'; // t.kind==number means that t is a number Token
+const std::string Calculator::prompt = "> ";
+const std::string Calculator::result = "= "; // used to indicate that what follows is a result
+
+Calculator::Calculator(){
 //	ts = Token_stream();
+
 }
 
-Token Expression::get_token(){
+Token Calculator::get_token(){
 	return ts.get();
 }
 
-double Expression::expression(){
+double Calculator::expression(){
 	double left = term(); // read and evaluate a Term
 	Token t = ts.get(); // get the next token
 	while (true) {
@@ -35,7 +40,7 @@ double Expression::expression(){
 		}
 	}
 }
-double Expression::term(){
+double Calculator::term(){
 	double left = primary();
 	Token t = ts.get();
 	while (true) {
@@ -66,7 +71,7 @@ double Expression::term(){
 		}
 	}
 }
-double Expression::primary(){
+double Calculator::primary(){
 	Token t = get_token();
 	switch (t.kind) {
 		case '(': // handle ‘(‘ expression ‘)’
@@ -76,7 +81,7 @@ double Expression::primary(){
 			if (t.kind != ')') throw std::invalid_argument("')' expected");
 			return d;
 		}
-		case '8': // we use ‘8’ to represent a number
+		case number: // we use ‘8’ to represent a number
 			return t.value; // return the number’s value
 		case '-' :
 			return -primary();
@@ -87,26 +92,16 @@ double Expression::primary(){
 	}
 }
 
-int Expression::evaluate(){
-	
-	try {
-		while (std::cin) {
-			std::cout << "> ";
-			Token t = ts.get();
-			while (t.kind == ';') t=ts.get(); // eat ‘;’
-			if (t.kind == 'q') {
-				return 0;
-			}
-			ts.putback(t);
-			std::cout << "=" << this->expression() << '\n';
+void Calculator::evaluate(){
+
+	while (std::cin) {
+		std::cout << prompt;
+		Token t = ts.get();
+		while (t.kind == Token_stream::print) t=ts.get(); // eat ‘;’
+		if (t.kind == Token_stream::quit) {
+			return;
 		}
-		return 0;
-	} catch (std::exception& e) {
-		std::cerr << e.what() << '\n';
-		return 1;
-	}
-	catch (...) {
-		std::cerr << "exception \n";
-		return 2;
+		ts.putback(t);
+		std::cout << result << this->expression() << '\n';
 	}
 }
