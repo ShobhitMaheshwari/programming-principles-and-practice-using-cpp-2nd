@@ -8,4 +8,4 @@ file(GLOB SOURCES "src/*.cpp")
 
 include_directories(include)
 
-add_executable(stringpermutation ${SOURCES} src/Expression.cpp include/Expression.h include/std_lib_facilities.h src/Token_stream.cpp include/Token_stream.h)
+add_executable(calculator ${SOURCES})
