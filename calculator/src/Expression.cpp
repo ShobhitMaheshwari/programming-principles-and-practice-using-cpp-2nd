@@ -73,14 +73,17 @@ double Expression::primary(){
 		}
 		case '8': // we use ‘8’ to represent a number
 			return t.value; // return the number’s value
+		case '-' :
+			return -primary();
+		case '+':
+			return primary();
 		default:
 			throw std::invalid_argument("primary expected");
 	}
 }
 
 int Expression::evaluate(){
-
-	double val = 0;
+	
 	try {
 		while (std::cin) {
 			std::cout << "> ";
